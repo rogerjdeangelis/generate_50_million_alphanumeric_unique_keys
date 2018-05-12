@@ -1,5 +1,8 @@
 Generate 50 million alphanumeric unique keys
 
+There is a bug in this code, stri_rand_strings uses replacement. I have added R code on the end to take care of duplicates.
+However it may make this technique too slow for 50 million uniques?
+
 github
 https://github.com/rogerjdeangelis/generate_50_million_alphanumeric_unique_keys
 
@@ -82,4 +85,30 @@ NOTE: Data set "WRK.want" has 5000000 observation(s) and 1 variable(s)
 NOTE: Procedure r step took :
       real time : 1:47.608
 
+My mistake. stri_rand_strings uses replacement.
+You need to dedup.
+
+see Julien Navarre dedup routine
+https://stackoverflow.com/users/2667955/julien-navarre
+
+Unfortunately this seems to really slow down processing?
+
+%utl_submit_wps64('
+libname sd1 "d:/sd1";
+options set=R_HOME "C:/Program Files/R/R-3.3.1";
+proc r;
+submit;
+source("C:/Program Files/R/R-3.3.1/etc/Rprofile.site", echo=T);
+set.seed(12345)
+library(stringi);
+idGenerator <- function(n, lengthId) {
+idList <- stringi::stri_rand_strings(n, lengthId, pattern = "[A-Za-z0-9]");
+  while(any(duplicated(idList))) {;
+    idList[which(duplicated(idList))]
+    <- stringi::stri_rand_strings(sum(duplicated(idList), na.rm = TRUE), lengthId, pattern = "[A-Za-z0-9]");
+}; return(idList) };
+idGenerator(16,1);
+endsubmit;
+run;quit;
+');
 
