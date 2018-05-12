@@ -1,8 +1,8 @@
 # generate_50_million_alphanumeric_unique_keys
 Generate 50 million alphanumeric unique keys. Keywords: sas sql join merge big data analytics macros oracle teradata mysql sas communities stackoverflow statistics artificial inteligence AI Python R Java Javascript WPS Matlab SPSS Scala Perl C C# Excel MS Access JSON graphics maps NLP natural language processing machine learning igraph DOSUBL DOW loop stackoverflow SAS community.
 
-There is a bug stri_rand_strings uses replacement. I have added R code on the end to take care of duplicates.
-However it may make this technique too slow for 50 million uniques?
+    There is a bug in this code, stri_rand_strings uses replacement. I have added R code on the end to take care of duplicates.
+    However it may make this technique too slow for 50 million uniques?
 
     Generate 50 million alphanumeric unique keys
 
