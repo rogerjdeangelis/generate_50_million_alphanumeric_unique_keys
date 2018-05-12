@@ -1,5 +1,9 @@
 # generate_50_million_alphanumeric_unique_keys
 Generate 50 million alphanumeric unique keys. Keywords: sas sql join merge big data analytics macros oracle teradata mysql sas communities stackoverflow statistics artificial inteligence AI Python R Java Javascript WPS Matlab SPSS Scala Perl C C# Excel MS Access JSON graphics maps NLP natural language processing machine learning igraph DOSUBL DOW loop stackoverflow SAS community.
+
+There is a bug stri_rand_strings uses replacement. I have added R code on the end to take care of duplicates.
+However it may make this technique too slow for 50 million uniques?
+
     Generate 50 million alphanumeric unique keys
 
       WPS Proc R
@@ -85,4 +89,36 @@ Generate 50 million alphanumeric unique keys. Keywords: sas sql join merge big d
     16        run;
     NOTE: Procedure r step took :
           real time : 1:47.608
+
+    My mistake. stri_rand_strings uses replacement.
+    You need to dedup.
+
+    see Julien Navarre dedup routine
+    https://stackoverflow.com/users/2667955/julien-navarre
+
+    Unfortunately this seems to really slow down processing?
+
+    %utl_submit_wps64('
+    libname sd1 "d:/sd1";
+    options set=R_HOME "C:/Program Files/R/R-3.3.1";
+    proc r;
+    submit;
+    source("C:/Program Files/R/R-3.3.1/etc/Rprofile.site", echo=T);
+    set.seed(12345)
+    library(stringi);
+    idGenerator <- function(n, lengthId) {
+    idList <- stringi::stri_rand_strings(n, lengthId, pattern = "[A-Za-z0-9]");
+      while(any(duplicated(idList))) {;
+        idList[which(duplicated(idList))]
+        <- stringi::stri_rand_strings(sum(duplicated(idList), na.rm = TRUE), lengthId, pattern = "[A-Za-z0-9]");
+    }; return(idList) };
+    idGenerator(16,1);
+    endsubmit;
+    run;quit;
+    ');
+
+
+    The WPS System
+
+     [1] "W" "h" "Z" "X" "K" "c" "U" "C" "8" "4" "e" "z" "0" "E" "q" "5"
 
