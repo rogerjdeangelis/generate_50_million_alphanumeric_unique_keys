@@ -1,6 +1,6 @@
 Generate 50 million alphanumeric unique keys
 
-see excelent solution on the end by
+see excelent solution on the end by which overcomes original issues
 
 Paul Dorfman
 Ian ian.wakeling@hanani.qistats.co.uk
