@@ -1,6 +1,13 @@
 # generate_50_million_alphanumeric_unique_keys
 Generate 50 million alphanumeric unique keys. Keywords: sas sql join merge big data analytics macros oracle teradata mysql sas communities stackoverflow statistics artificial inteligence AI Python R Java Javascript WPS Matlab SPSS Scala Perl C C# Excel MS Access JSON graphics maps NLP natural language processing machine learning igraph DOSUBL DOW loop stackoverflow SAS community.
 
+
+    see excelent solution on the end by which overcomes original issues
+
+    Paul Dorfman
+    Ian ian.wakeling@hanani.qistats.co.uk
+    via listserv.uga.edu
+
     There is a bug in this code, stri_rand_strings uses replacement. I have added R code on the end to take care of duplicates.
     However it may make this technique too slow for 50 million uniques?
 
@@ -121,4 +128,61 @@ Generate 50 million alphanumeric unique keys. Keywords: sas sql join merge big d
     The WPS System
 
      [1] "W" "h" "Z" "X" "K" "c" "U" "C" "8" "4" "e" "z" "0" "E" "q" "5"
+     
+     
+     
+         
+         
+    see excelent solution on the end by
+
+    Paul Dorfman
+    Ian ian.wakeling@hanani.qistats.co.uk
+    via listserv.uga.edu
+
+
+    %let K =    5 ;
+    %let N =   52 ;
+    %let KK = 500 ;
+
+    data ID (keep = ID) ;
+       retain K &K N &N KK &KK ;
+       S  = put (compress (compress (collate(0, 255), "_"), , "kN"), $&N..) ;
+       C  = comb (N, K) ;
+       F  = fact (K) ;
+       NN = C * F ;
+       put (S K N KK C F NN) (=) ;
+       array aid [&K] $1 _temporary_ ;
+       do i1 =  1     to n - k + 1 ;
+       aid[1] = char (s, i1) ;
+       do i2 = i1 + 1 to n - k + 2 ;
+       aid[2] = char (s, i2) ;
+       do i3 = i2 + 1 to n - k + 3 ;
+       aid[3] = char (s, i3) ;
+       do i4 = i3 + 1 to n - k + 4 ;
+       aid[4] = char (s, i4) ;
+       do i5 = i4 + 1 to n - k + 5 ;
+       aid[5] = char (s, i5) ;
+       do i = 1 to F ;
+         rc = allperm (i, of aid[*]) ;
+         if rand("uniform") < divide (KK, NN) then do ;
+           ID = put (cat (of aid[*]), $5.) ;
+           output ;
+           KK +- 1 ;
+         end ;
+         NN +- 1 ;
+       end ;
+       temp   = aid[1] ;
+       aid[1] = aid[2] ;
+       aid[2] = temp ;
+       end ;
+       end ;
+       end ;
+       end ;
+       end ;
+    run ;
+
+    Kudos and best,
+    Paul Dorfman
+
+
 
